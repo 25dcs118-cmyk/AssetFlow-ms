@@ -1,11 +1,8 @@
 import base64
 import os
 
-from odoo import api, SUPERUSER_ID
 
-
-def post_init_hook(cr, registry):
-    env = api.Environment(cr, SUPERUSER_ID, {})
+def post_init_hook(env):
     company = env.ref('base.main_company', raise_if_not_found=False)
     if not company:
         return
