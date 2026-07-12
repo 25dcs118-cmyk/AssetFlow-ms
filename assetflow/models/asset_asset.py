@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+
 from odoo import api, fields, models
 from odoo.exceptions import UserError
 
@@ -25,6 +27,7 @@ class AssetAsset(models.Model):
     ], default='new', tracking=True)
     location = fields.Char()
     is_shared = fields.Boolean(string='Shared / Bookable', tracking=True)
+    image_1920 = fields.Image(string='Photo', max_width=1920, max_height=1920)
     state = fields.Selection([
         ('available', 'Available'),
         ('allocated', 'Allocated'),
@@ -32,7 +35,11 @@ class AssetAsset(models.Model):
         ('maintenance', 'Under Maintenance'),
         ('lost', 'Lost'),
         ('retired', 'Retired'),
+        ('disposed', 'Disposed'),
     ], default='available', required=True, tracking=True)
+    warranty_expiry_date = fields.Date(compute='_compute_warranty_expiry_date', store=True)
+    near_retirement = fields.Boolean(compute='_compute_warranty_expiry_date', store=True,
+                                      help="Warranty has expired or expires within 30 days.")
 
     allocation_ids = fields.One2many('asset.allocation', 'asset_id', string='Allocations')
     current_allocation_id = fields.Many2one(
@@ -49,6 +56,18 @@ class AssetAsset(models.Model):
         ('tag_uniq', 'unique(tag)', 'Asset tag must be unique.'),
         ('serial_number_uniq', 'unique(serial_number)', 'Serial number must be unique.'),
     ]
+
+    @api.depends('acquisition_date', 'category_id.warranty_period')
+    def _compute_warranty_expiry_date(self):
+        today = fields.Date.context_today(self)
+        for asset in self:
+            if asset.acquisition_date and asset.category_id.warranty_period:
+                expiry = asset.acquisition_date + relativedelta(months=asset.category_id.warranty_period)
+                asset.warranty_expiry_date = expiry
+                asset.near_retirement = expiry <= today + relativedelta(days=30)
+            else:
+                asset.warranty_expiry_date = False
+                asset.near_retirement = False
 
     @api.depends('allocation_ids.state', 'allocation_ids.employee_id', 'allocation_ids.department_id')
     def _compute_current_allocation(self):
@@ -83,9 +102,15 @@ class AssetAsset(models.Model):
         return True
 
     def action_retire(self):
-        self.write({'state': 'retired', 'active': False})
+        self.write({'state': 'retired'})
         for asset in self:
             self.env['asset.activity.log'].log(asset, 'retired', f"Asset {asset.tag} retired.")
+        return True
+
+    def action_dispose(self):
+        self.write({'state': 'disposed', 'active': False})
+        for asset in self:
+            self.env['asset.activity.log'].log(asset, 'disposed', f"Asset {asset.tag} disposed.")
         return True
 
     def _open_form(self, res_model, extra_context=None):

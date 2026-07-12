@@ -84,6 +84,11 @@ class AssetAllocation(models.Model):
                 allocation.asset_id, 'allocated',
                 f"Asset {allocation.asset_id.tag} allocated to {allocation.holder_name}."
             )
+            if allocation.holder_type == 'employee' and allocation.employee_id:
+                allocation.message_post(
+                    body=f"Asset Assigned: {allocation.asset_id.tag} ({allocation.asset_id.name}) has been allocated to you.",
+                    partner_ids=[allocation.employee_id.partner_id.id],
+                )
         return allocations
 
     @api.model

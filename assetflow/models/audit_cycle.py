@@ -78,4 +78,14 @@ class AuditCycle(models.Model):
                 cycle, 'audit_closed',
                 f"Audit cycle {cycle.name} closed. {cycle.discrepancy_count} discrepancy(ies) found."
             )
+            if cycle.discrepancy_count:
+                managers = self.env['res.users'].search([
+                    ('groups_id', 'in', self.env.ref('assetflow.group_assetflow_asset_manager').id),
+                ])
+                if managers:
+                    cycle.message_post(
+                        body=f"Audit Discrepancy Flagged: {cycle.discrepancy_count} discrepancy(ies) found "
+                             f"in audit cycle {cycle.name}. Review required.",
+                        partner_ids=managers.mapped('partner_id.id'),
+                    )
         return True

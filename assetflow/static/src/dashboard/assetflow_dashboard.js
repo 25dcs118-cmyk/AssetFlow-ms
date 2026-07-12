@@ -17,20 +17,28 @@ export class AssetflowDashboard extends Component {
             bookings: 0,
             transfers: 0,
             overdue: 0,
+            upcomingReturns: 0,
         });
         onWillStart(() => this.loadKpis());
     }
 
     async loadKpis() {
-        const [available, allocated, maintenance, bookings, transfers, overdue] = await Promise.all([
+        const today = new Date().toISOString().slice(0, 10);
+        const in7 = new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+        const [available, allocated, maintenance, bookings, transfers, overdue, upcomingReturns] = await Promise.all([
             this.orm.searchCount("asset.asset", [["state", "=", "available"]]),
             this.orm.searchCount("asset.asset", [["state", "=", "allocated"]]),
             this.orm.searchCount("asset.maintenance.request", [["state", "in", ["approved", "in_progress"]]]),
             this.orm.searchCount("resource.booking", [["state", "in", ["upcoming", "ongoing"]]]),
             this.orm.searchCount("asset.transfer", [["state", "=", "requested"]]),
             this.orm.searchCount("asset.allocation", [["is_overdue", "=", true]]),
+            this.orm.searchCount("asset.allocation", [
+                ["state", "=", "active"],
+                ["expected_return_date", ">=", today],
+                ["expected_return_date", "<=", in7],
+            ]),
         ]);
-        Object.assign(this.state, { available, allocated, maintenance, bookings, transfers, overdue });
+        Object.assign(this.state, { available, allocated, maintenance, bookings, transfers, overdue, upcomingReturns });
     }
 
     openAssets(domain) {

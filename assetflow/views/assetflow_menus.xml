@@ -41,6 +41,9 @@
     <menuitem id="menu_assetflow_department_allocation_report" name="Department Allocation Summary" parent="menu_assetflow_reporting"
               sequence="50" action="action_asset_allocation_department_report"/>
 
+    <menuitem id="menu_assetflow_retirement_report" name="Due for Maintenance / Retirement" parent="menu_assetflow_reporting"
+              sequence="60" action="action_asset_maintenance_retirement_report"/>
+
     <menuitem id="menu_assetflow_configuration" name="Configuration" parent="menu_assetflow_root" sequence="90"
               groups="assetflow.group_assetflow_admin"/>
 

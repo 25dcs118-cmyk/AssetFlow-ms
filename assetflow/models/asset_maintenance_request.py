@@ -64,11 +64,21 @@ class AssetMaintenanceRequest(models.Model):
                 request.asset_id, 'maintenance_approved',
                 f"Maintenance approved for asset {request.asset_id.tag}."
             )
+            request.message_post(
+                body=f"Maintenance Approved: your request for {request.asset_id.tag} has been approved.",
+                partner_ids=[request.requester_id.partner_id.id],
+            )
         return True
 
     def action_reject(self):
         self._check_can_manage()
-        self.filtered(lambda r: r.state == 'pending').write({'state': 'rejected'})
+        pending = self.filtered(lambda r: r.state == 'pending')
+        pending.write({'state': 'rejected'})
+        for request in pending:
+            request.message_post(
+                body=f"Maintenance Rejected: your request for {request.asset_id.tag} was rejected.",
+                partner_ids=[request.requester_id.partner_id.id],
+            )
         return True
 
     def action_start(self):

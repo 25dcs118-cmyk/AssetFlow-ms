@@ -94,6 +94,13 @@ class AssetTransfer(models.Model):
                 transfer.asset_id, 'transfer_approved',
                 f"Transfer approved for asset {transfer.asset_id.tag}, now held by {new_allocation.holder_name}."
             )
+            notify_partners = transfer.requested_by.partner_id
+            if transfer.new_employee_id:
+                notify_partners |= transfer.new_employee_id.partner_id
+            transfer.message_post(
+                body=f"Transfer Approved: {transfer.asset_id.tag} is now held by {new_allocation.holder_name}.",
+                partner_ids=notify_partners.ids,
+            )
         return True
 
     def action_reject(self):

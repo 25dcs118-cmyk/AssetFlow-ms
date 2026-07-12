@@ -49,7 +49,7 @@
         <field name="model">asset.asset</field>
         <field name="arch" type="xml">
             <tree decoration-success="state == 'available'" decoration-info="state == 'allocated'"
-                  decoration-warning="state in ('reserved', 'maintenance')" decoration-muted="state in ('lost', 'retired')">
+                  decoration-warning="state in ('reserved', 'maintenance')" decoration-muted="state in ('lost', 'retired', 'disposed')">
                 <field name="tag"/>
                 <field name="name"/>
                 <field name="category_id"/>
@@ -57,10 +57,11 @@
                 <field name="current_holder"/>
                 <field name="condition"/>
                 <field name="is_shared" widget="boolean_toggle"/>
+                <field name="near_retirement" widget="boolean_toggle"/>
                 <field name="state" widget="badge"
                        decoration-success="state == 'available'" decoration-info="state == 'allocated'"
                        decoration-warning="state in ('reserved', 'maintenance')" decoration-danger="state == 'lost'"
-                       decoration-muted="state == 'retired'"/>
+                       decoration-muted="state in ('retired', 'disposed')"/>
             </tree>
         </field>
     </record>
@@ -79,6 +80,7 @@
                 <filter string="Allocated" name="filter_allocated" domain="[('state', '=', 'allocated')]"/>
                 <filter string="Under Maintenance" name="filter_maintenance" domain="[('state', '=', 'maintenance')]"/>
                 <filter string="Shared / Bookable" name="filter_shared" domain="[('is_shared', '=', True)]"/>
+                <filter string="Near Retirement" name="filter_near_retirement" domain="[('near_retirement', '=', True)]"/>
                 <group expand="0" string="Group By">
                     <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
                     <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
@@ -103,14 +105,18 @@
                     <button name="action_open_new_maintenance" type="object" string="Raise Maintenance Request"
                             invisible="state not in ('available', 'allocated')"/>
                     <button name="action_mark_lost" type="object" string="Mark Lost"
-                            invisible="state in ('lost', 'retired')" confirm="Mark this asset as Lost?"/>
+                            invisible="state in ('lost', 'retired', 'disposed')" confirm="Mark this asset as Lost?"/>
                     <button name="action_retire" type="object" string="Retire"
-                            invisible="state in ('lost', 'retired')" confirm="Retire this asset? This cannot be undone."/>
+                            invisible="state in ('lost', 'retired', 'disposed')" confirm="Retire this asset?"/>
+                    <button name="action_dispose" type="object" string="Dispose"
+                            invisible="state == 'disposed'" confirm="Dispose this asset? This cannot be undone."/>
                     <field name="state" widget="statusbar" statusbar_visible="available,allocated,reserved,maintenance"/>
                 </header>
                 <sheet>
                     <widget name="web_ribbon" title="Lost" bg_color="text-bg-danger" invisible="state != 'lost'"/>
                     <widget name="web_ribbon" title="Retired" bg_color="text-bg-secondary" invisible="state != 'retired'"/>
+                    <widget name="web_ribbon" title="Disposed" bg_color="text-bg-secondary" invisible="state != 'disposed'"/>
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_1920'}"/>
                     <div class="oe_title">
                         <label for="name"/>
                         <h1><field name="name" placeholder="e.g. Laptop"/></h1>
@@ -130,6 +136,8 @@
                             <field name="acquisition_date"/>
                             <field name="acquisition_cost"/>
                             <field name="currency_id" invisible="1"/>
+                            <field name="warranty_expiry_date" readonly="1"/>
+                            <field name="near_retirement" readonly="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -182,5 +190,13 @@
             <p class="o_view_nocontent_smiling_face">Register your first asset</p>
             <p>Track laptops, vehicles, rooms and equipment through their full lifecycle.</p>
         </field>
+    </record>
+
+    <record id="action_asset_maintenance_retirement_report" model="ir.actions.act_window">
+        <field name="name">Due for Maintenance / Nearing Retirement</field>
+        <field name="res_model">asset.asset</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">['|', ('state', '=', 'maintenance'), ('near_retirement', '=', True)]</field>
+        <field name="context">{}</field>
     </record>
 </odoo>

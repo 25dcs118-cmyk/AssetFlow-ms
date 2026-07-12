@@ -39,7 +39,7 @@
                     <div class="assetflow_kpi_icon assetflow_tint_warning"><i class="fa fa-wrench"/></div>
                     <div>
                         <div class="assetflow_kpi_value" t-esc="state.maintenance"/>
-                        <div class="assetflow_kpi_label">Maintenance Active</div>
+                        <div class="assetflow_kpi_label">Maintenance Today</div>
                     </div>
                 </div>
                 <div class="assetflow_kpi_card" t-on-pointermove="onCardPointerMove" t-on-click="() => this.openBookings([['state', 'in', ['upcoming', 'ongoing']]])" style="--i: 3">
@@ -61,6 +61,13 @@
                     <div>
                         <div class="assetflow_kpi_value" t-esc="state.overdue"/>
                         <div class="assetflow_kpi_label">Overdue Returns</div>
+                    </div>
+                </div>
+                <div class="assetflow_kpi_card" t-on-pointermove="onCardPointerMove" t-on-click="() => this.openAllocations([['state', '=', 'active'], ['is_overdue', '=', false]])" style="--i: 6">
+                    <div class="assetflow_kpi_icon assetflow_tint_info"><i class="fa fa-clock-o"/></div>
+                    <div>
+                        <div class="assetflow_kpi_value" t-esc="state.upcomingReturns"/>
+                        <div class="assetflow_kpi_label">Upcoming Returns</div>
                     </div>
                 </div>
             </div>

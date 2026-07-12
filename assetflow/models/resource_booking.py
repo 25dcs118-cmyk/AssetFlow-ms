@@ -67,6 +67,10 @@ class ResourceBooking(models.Model):
                 f"{booking.asset_id.tag} booked by {booking.requester_id.name} "
                 f"{booking.start_datetime} - {booking.end_datetime}."
             )
+            booking.message_post(
+                body=f"Booking Confirmed: {booking.asset_id.name} from {booking.start_datetime} to {booking.end_datetime}.",
+                partner_ids=[booking.requester_id.partner_id.id],
+            )
         return bookings
 
     def action_cancel(self):
@@ -77,6 +81,10 @@ class ResourceBooking(models.Model):
             booking.state = 'cancelled'
             if was_ongoing and booking.asset_id.state == 'reserved':
                 booking.asset_id.write({'state': 'available'})
+            booking.message_post(
+                body=f"Booking Cancelled: {booking.asset_id.name} ({booking.start_datetime} - {booking.end_datetime}).",
+                partner_ids=[booking.requester_id.partner_id.id],
+            )
         return True
 
     @api.model
