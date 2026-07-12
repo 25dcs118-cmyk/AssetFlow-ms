@@ -9,7 +9,9 @@
                 <field name="requester_id"/>
                 <field name="start_datetime"/>
                 <field name="end_datetime"/>
-                <field name="state"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'upcoming'" decoration-success="state == 'ongoing'"
+                       decoration-muted="state in ('completed', 'cancelled')"/>
             </tree>
         </field>
     </record>
@@ -57,6 +59,10 @@
         <field name="name">Bookings</field>
         <field name="res_model">resource.booking</field>
         <field name="view_mode">calendar,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No bookings yet</p>
+            <p>Book a shared resource (room, vehicle, equipment) from its asset record.</p>
+        </field>
     </record>
 
     <record id="view_resource_booking_pivot" model="ir.ui.view">

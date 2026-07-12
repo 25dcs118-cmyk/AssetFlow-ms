@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="view_asset_asset_kanban" model="ir.ui.view">
+        <field name="name">asset.asset.kanban</field>
+        <field name="model">asset.asset</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column assetflow_kanban">
+                <field name="tag"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="department_id"/>
+                <field name="current_holder"/>
+                <field name="condition"/>
+                <field name="state"/>
+                <field name="is_shared"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click assetflow_kanban_card">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                    <div class="text-muted small"><field name="tag"/></div>
+                                </div>
+                                <span t-if="record.is_shared.raw_value" class="badge text-bg-info">
+                                    <i class="fa fa-calendar me-1" title="Bookable"/>Bookable
+                                </span>
+                            </div>
+                            <div class="o_kanban_record_body mt-2">
+                                <div class="mb-1"><i class="fa fa-tag text-muted me-1" title="Category"/><field name="category_id"/></div>
+                                <div class="mb-1" t-if="record.department_id.value"><i class="fa fa-building text-muted me-1" title="Department"/><field name="department_id"/></div>
+                                <div t-if="record.current_holder.value"><i class="fa fa-user text-muted me-1" title="Holder"/><field name="current_holder"/></div>
+                            </div>
+                            <div class="o_kanban_record_bottom mt-2">
+                                <div class="oe_kanban_bottom_left">
+                                    <span t-if="record.condition.value" class="badge text-bg-light border">
+                                        <field name="condition"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="view_asset_asset_tree" model="ir.ui.view">
         <field name="name">asset.asset.tree</field>
         <field name="model">asset.asset</field>
@@ -12,8 +56,11 @@
                 <field name="department_id"/>
                 <field name="current_holder"/>
                 <field name="condition"/>
-                <field name="is_shared"/>
-                <field name="state"/>
+                <field name="is_shared" widget="boolean_toggle"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'available'" decoration-info="state == 'allocated'"
+                       decoration-warning="state in ('reserved', 'maintenance')" decoration-danger="state == 'lost'"
+                       decoration-muted="state == 'retired'"/>
             </tree>
         </field>
     </record>
@@ -128,8 +175,12 @@
     <record id="view_asset_asset_action" model="ir.actions.act_window">
         <field name="name">Assets</field>
         <field name="res_model">asset.asset</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="search_view_id" ref="view_asset_asset_search"/>
         <field name="context">{'search_default_filter_available': 0}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Register your first asset</p>
+            <p>Track laptops, vehicles, rooms and equipment through their full lifecycle.</p>
+        </field>
     </record>
 </odoo>

@@ -10,8 +10,9 @@
                 <field name="allocation_date"/>
                 <field name="expected_return_date"/>
                 <field name="actual_return_date"/>
-                <field name="is_overdue"/>
-                <field name="state"/>
+                <field name="is_overdue" widget="boolean_toggle"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'" decoration-muted="state in ('returned', 'transferred')"/>
             </tree>
         </field>
     </record>
@@ -75,6 +76,10 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="view_asset_allocation_search"/>
         <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No allocations yet</p>
+            <p>Allocate an available asset from its record to see it here.</p>
+        </field>
     </record>
 
     <record id="view_asset_allocation_pivot" model="ir.ui.view">

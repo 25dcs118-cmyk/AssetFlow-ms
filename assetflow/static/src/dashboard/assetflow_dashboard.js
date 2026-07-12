@@ -82,6 +82,16 @@ export class AssetflowDashboard extends Component {
             domain,
         });
     }
+
+    quickCreate(resModel, name) {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name,
+            res_model: resModel,
+            views: [[false, "form"]],
+            target: "new",
+        });
+    }
 }
 
 registry.category("actions").add("assetflow_dashboard", AssetflowDashboard);

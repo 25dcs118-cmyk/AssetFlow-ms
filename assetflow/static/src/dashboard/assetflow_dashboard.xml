@@ -2,31 +2,66 @@
 <templates xml:space="preserve">
     <t t-name="assetflow.Dashboard">
         <div class="o_assetflow_dashboard p-4">
-            <h2 class="mb-4">AssetFlow Dashboard</h2>
-            <div class="d-flex flex-wrap gap-3">
-                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openAssets([['state', '=', 'available']])">
-                    <div class="assetflow_kpi_value fs-2 fw-bold text-success" t-esc="state.available"/>
-                    <div class="assetflow_kpi_label text-muted">Assets Available</div>
+            <div class="d-flex justify-content-between align-items-start flex-wrap mb-4">
+                <div>
+                    <h2 class="mb-1">AssetFlow Dashboard</h2>
+                    <div class="text-muted">Real-time overview of your organization's assets</div>
                 </div>
-                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openAssets([['state', '=', 'allocated']])">
-                    <div class="assetflow_kpi_value fs-2 fw-bold text-primary" t-esc="state.allocated"/>
-                    <div class="assetflow_kpi_label text-muted">Assets Allocated</div>
+                <div class="d-flex gap-2 mt-2 mt-md-0">
+                    <button class="btn btn-primary" t-on-click="() => this.quickCreate('asset.asset', 'Register Asset')">
+                        <i class="fa fa-plus me-1"/>Register Asset
+                    </button>
+                    <button class="btn btn-outline-primary" t-on-click="() => this.quickCreate('resource.booking', 'New Booking')">
+                        <i class="fa fa-calendar me-1"/>Book Resource
+                    </button>
+                    <button class="btn btn-outline-primary" t-on-click="() => this.quickCreate('asset.maintenance.request', 'Raise Maintenance Request')">
+                        <i class="fa fa-wrench me-1"/>Raise Maintenance
+                    </button>
                 </div>
-                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openMaintenance([['state', 'in', ['approved', 'in_progress']]])">
-                    <div class="assetflow_kpi_value fs-2 fw-bold text-warning" t-esc="state.maintenance"/>
-                    <div class="assetflow_kpi_label text-muted">Maintenance Active</div>
+            </div>
+
+            <div class="assetflow_kpi_grid">
+                <div class="assetflow_kpi_card" t-on-click="() => this.openAssets([['state', '=', 'available']])">
+                    <div class="assetflow_kpi_icon text-bg-success"><i class="fa fa-check-circle"/></div>
+                    <div>
+                        <div class="assetflow_kpi_value" t-esc="state.available"/>
+                        <div class="assetflow_kpi_label">Assets Available</div>
+                    </div>
                 </div>
-                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openBookings([['state', 'in', ['upcoming', 'ongoing']]])">
-                    <div class="assetflow_kpi_value fs-2 fw-bold text-info" t-esc="state.bookings"/>
-                    <div class="assetflow_kpi_label text-muted">Active Bookings</div>
+                <div class="assetflow_kpi_card" t-on-click="() => this.openAssets([['state', '=', 'allocated']])">
+                    <div class="assetflow_kpi_icon text-bg-primary"><i class="fa fa-user"/></div>
+                    <div>
+                        <div class="assetflow_kpi_value" t-esc="state.allocated"/>
+                        <div class="assetflow_kpi_label">Assets Allocated</div>
+                    </div>
                 </div>
-                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openTransfers([['state', '=', 'requested']])">
-                    <div class="assetflow_kpi_value fs-2 fw-bold text-secondary" t-esc="state.transfers"/>
-                    <div class="assetflow_kpi_label text-muted">Pending Transfers</div>
+                <div class="assetflow_kpi_card" t-on-click="() => this.openMaintenance([['state', 'in', ['approved', 'in_progress']]])">
+                    <div class="assetflow_kpi_icon text-bg-warning"><i class="fa fa-wrench"/></div>
+                    <div>
+                        <div class="assetflow_kpi_value" t-esc="state.maintenance"/>
+                        <div class="assetflow_kpi_label">Maintenance Active</div>
+                    </div>
                 </div>
-                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openAllocations([['is_overdue', '=', true]])">
-                    <div class="assetflow_kpi_value fs-2 fw-bold text-danger" t-esc="state.overdue"/>
-                    <div class="assetflow_kpi_label text-muted">Overdue Returns</div>
+                <div class="assetflow_kpi_card" t-on-click="() => this.openBookings([['state', 'in', ['upcoming', 'ongoing']]])">
+                    <div class="assetflow_kpi_icon text-bg-info"><i class="fa fa-calendar"/></div>
+                    <div>
+                        <div class="assetflow_kpi_value" t-esc="state.bookings"/>
+                        <div class="assetflow_kpi_label">Active Bookings</div>
+                    </div>
+                </div>
+                <div class="assetflow_kpi_card" t-on-click="() => this.openTransfers([['state', '=', 'requested']])">
+                    <div class="assetflow_kpi_icon text-bg-secondary"><i class="fa fa-exchange"/></div>
+                    <div>
+                        <div class="assetflow_kpi_value" t-esc="state.transfers"/>
+                        <div class="assetflow_kpi_label">Pending Transfers</div>
+                    </div>
+                </div>
+                <div class="assetflow_kpi_card" t-on-click="() => this.openAllocations([['is_overdue', '=', true]])">
+                    <div class="assetflow_kpi_icon text-bg-danger"><i class="fa fa-exclamation-triangle"/></div>
+                    <div>
+                        <div class="assetflow_kpi_value" t-esc="state.overdue"/>
+                        <div class="assetflow_kpi_label">Overdue Returns</div>
+                    </div>
                 </div>
             </div>
         </div>
