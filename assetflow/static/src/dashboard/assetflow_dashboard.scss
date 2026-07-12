@@ -6,6 +6,7 @@
     }
 
     .assetflow_kpi_card {
+        position: relative;
         display: flex;
         align-items: center;
         gap: 14px;
@@ -14,11 +15,35 @@
         border: 1px solid var(--o-view-border-color, #dee2e6);
         background-color: var(--o-view-background-color, #fff);
         cursor: pointer;
+        overflow: hidden;
         transition: box-shadow 0.15s ease-in-out, transform 0.1s ease-in-out;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(
+                220px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+                rgba(113, 75, 154, 0.12),
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            pointer-events: none;
+        }
 
         &:hover {
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
             transform: translateY(-1px);
+
+            &::before {
+                opacity: 1;
+            }
+        }
+
+        > * {
+            position: relative;
         }
     }
 

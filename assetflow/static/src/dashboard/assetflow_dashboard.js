@@ -92,6 +92,13 @@ export class AssetflowDashboard extends Component {
             target: "new",
         });
     }
+
+    onCardPointerMove(ev) {
+        const card = ev.currentTarget;
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty("--spot-x", `${ev.clientX - rect.left}px`);
+        card.style.setProperty("--spot-y", `${ev.clientY - rect.top}px`);
+    }
 }
 
 registry.category("actions").add("assetflow_dashboard", AssetflowDashboard);

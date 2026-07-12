@@ -21,42 +21,42 @@
             </div>
 
             <div class="assetflow_kpi_grid">
-                <div class="assetflow_kpi_card" t-on-click="() => this.openAssets([['state', '=', 'available']])">
+                <div class="assetflow_kpi_card" t-on-pointermove="onCardPointerMove" t-on-click="() => this.openAssets([['state', '=', 'available']])">
                     <div class="assetflow_kpi_icon text-bg-success"><i class="fa fa-check-circle"/></div>
                     <div>
                         <div class="assetflow_kpi_value" t-esc="state.available"/>
                         <div class="assetflow_kpi_label">Assets Available</div>
                     </div>
                 </div>
-                <div class="assetflow_kpi_card" t-on-click="() => this.openAssets([['state', '=', 'allocated']])">
+                <div class="assetflow_kpi_card" t-on-pointermove="onCardPointerMove" t-on-click="() => this.openAssets([['state', '=', 'allocated']])">
                     <div class="assetflow_kpi_icon text-bg-primary"><i class="fa fa-user"/></div>
                     <div>
                         <div class="assetflow_kpi_value" t-esc="state.allocated"/>
                         <div class="assetflow_kpi_label">Assets Allocated</div>
                     </div>
                 </div>
-                <div class="assetflow_kpi_card" t-on-click="() => this.openMaintenance([['state', 'in', ['approved', 'in_progress']]])">
+                <div class="assetflow_kpi_card" t-on-pointermove="onCardPointerMove" t-on-click="() => this.openMaintenance([['state', 'in', ['approved', 'in_progress']]])">
                     <div class="assetflow_kpi_icon text-bg-warning"><i class="fa fa-wrench"/></div>
                     <div>
                         <div class="assetflow_kpi_value" t-esc="state.maintenance"/>
                         <div class="assetflow_kpi_label">Maintenance Active</div>
                     </div>
                 </div>
-                <div class="assetflow_kpi_card" t-on-click="() => this.openBookings([['state', 'in', ['upcoming', 'ongoing']]])">
+                <div class="assetflow_kpi_card" t-on-pointermove="onCardPointerMove" t-on-click="() => this.openBookings([['state', 'in', ['upcoming', 'ongoing']]])">
                     <div class="assetflow_kpi_icon text-bg-info"><i class="fa fa-calendar"/></div>
                     <div>
                         <div class="assetflow_kpi_value" t-esc="state.bookings"/>
                         <div class="assetflow_kpi_label">Active Bookings</div>
                     </div>
                 </div>
-                <div class="assetflow_kpi_card" t-on-click="() => this.openTransfers([['state', '=', 'requested']])">
+                <div class="assetflow_kpi_card" t-on-pointermove="onCardPointerMove" t-on-click="() => this.openTransfers([['state', '=', 'requested']])">
                     <div class="assetflow_kpi_icon text-bg-secondary"><i class="fa fa-exchange"/></div>
                     <div>
                         <div class="assetflow_kpi_value" t-esc="state.transfers"/>
                         <div class="assetflow_kpi_label">Pending Transfers</div>
                     </div>
                 </div>
-                <div class="assetflow_kpi_card" t-on-click="() => this.openAllocations([['is_overdue', '=', true]])">
+                <div class="assetflow_kpi_card" t-on-pointermove="onCardPointerMove" t-on-click="() => this.openAllocations([['is_overdue', '=', true]])">
                     <div class="assetflow_kpi_icon text-bg-danger"><i class="fa fa-exclamation-triangle"/></div>
                     <div>
                         <div class="assetflow_kpi_value" t-esc="state.overdue"/>
