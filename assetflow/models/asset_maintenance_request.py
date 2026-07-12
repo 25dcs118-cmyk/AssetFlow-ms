@@ -9,8 +9,15 @@ class AssetMaintenanceRequest(models.Model):
     _order = 'request_date desc'
 
     asset_id = fields.Many2one('asset.asset', required=True, tracking=True, ondelete='restrict')
+    category_id = fields.Many2one(related='asset_id.category_id', string='Category', store=True)
     requester_id = fields.Many2one('res.users', default=lambda self: self.env.user, required=True, tracking=True)
     technician_id = fields.Many2one('res.users', string='Assigned Technician', tracking=True)
+    priority = fields.Selection([
+        ('0', 'Low'),
+        ('1', 'Normal'),
+        ('2', 'High'),
+        ('3', 'Urgent'),
+    ], default='1', required=True, tracking=True)
     description = fields.Text(required=True)
     request_date = fields.Datetime(default=fields.Datetime.now, required=True)
     approval_date = fields.Datetime()

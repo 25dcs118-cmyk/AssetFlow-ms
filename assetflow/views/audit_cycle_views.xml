@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_audit_cycle_kanban" model="ir.ui.view">
+        <field name="name">audit.cycle.kanban</field>
+        <field name="model">audit.cycle</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column assetflow_kanban">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="line_count"/>
+                <field name="discrepancy_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click assetflow_kanban_card">
+                            <div class="o_kanban_record_top">
+                                <strong class="o_kanban_record_title"><field name="name"/></strong>
+                            </div>
+                            <div class="o_kanban_record_body mt-2">
+                                <div t-if="record.department_id.value"><i class="fa fa-building text-muted me-1" title="Department"/><field name="department_id"/></div>
+                                <div><i class="fa fa-calendar text-muted me-1" title="Date range"/><field name="date_from"/> - <field name="date_to"/></div>
+                                <div class="mt-1">
+                                    <span class="badge text-bg-light border"><field name="line_count"/> assets</span>
+                                    <span t-if="record.discrepancy_count.raw_value" class="badge text-bg-danger ms-1"><field name="discrepancy_count"/> discrepancies</span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_audit_cycle_tree" model="ir.ui.view">
+        <field name="name">audit.cycle.tree</field>
+        <field name="model">audit.cycle</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="line_count"/>
+                <field name="discrepancy_count"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'" decoration-warning="state == 'in_progress'"
+                       decoration-success="state == 'closed'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_audit_cycle_search" model="ir.ui.view">
+        <field name="name">audit.cycle.search</field>
+        <field name="model">audit.cycle</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="department_id"/>
+                <filter string="In Progress" name="filter_in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_audit_cycle_form" model="ir.ui.view">
+        <field name="name">audit.cycle.form</field>
+        <field name="model">audit.cycle</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Start Audit"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_close" type="object" string="Close Cycle"
+                            class="oe_highlight" invisible="state != 'in_progress'"
+                            confirm="Close this audit cycle? Confirmed-missing assets will be marked Lost."/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="department_id" readonly="state != 'draft'"/>
+                            <field name="location" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="auditor_ids" widget="many2many_tags" readonly="state != 'draft'"/>
+                    </group>
+                    <group string="Summary" invisible="state == 'draft'">
+                        <field name="line_count" readonly="1"/>
+                        <field name="unverified_count" readonly="1"/>
+                        <field name="discrepancy_count" readonly="1"/>
+                    </group>
+                    <notebook invisible="state == 'draft'">
+                        <page string="Audit Lines">
+                            <field name="line_ids" readonly="state == 'closed'">
+                                <tree editable="bottom" decoration-danger="result in ('missing', 'damaged')">
+                                    <field name="asset_id" readonly="1"/>
+                                    <field name="category_id" readonly="1"/>
+                                    <field name="auditor_id"/>
+                                    <field name="result"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_audit_cycle_action" model="ir.actions.act_window">
+        <field name="name">Audit Cycles</field>
+        <field name="res_model">audit.cycle</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_audit_cycle_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first audit cycle</p>
+            <p>Assign auditors to verify assets in a department/location over a date range.</p>
+        </field>
+    </record>
+</odoo>

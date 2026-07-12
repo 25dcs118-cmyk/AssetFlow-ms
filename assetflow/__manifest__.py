@@ -30,6 +30,7 @@ lifecycle only, no dependency on accounting or purchasing.
         'views/resource_booking_views.xml',
         'views/asset_maintenance_request_views.xml',
         'views/asset_activity_log_views.xml',
+        'views/audit_cycle_views.xml',
         'views/assetflow_dashboard_views.xml',
         'views/assetflow_menus.xml',
     ],

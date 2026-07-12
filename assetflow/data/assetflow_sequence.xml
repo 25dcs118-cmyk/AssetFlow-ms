@@ -8,4 +8,13 @@
         <field name="number_increment">1</field>
         <field name="implementation">standard</field>
     </record>
+
+    <record id="seq_audit_cycle" model="ir.sequence">
+        <field name="name">Audit Cycle</field>
+        <field name="code">audit.cycle</field>
+        <field name="prefix">AC-</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="implementation">standard</field>
+    </record>
 </odoo>

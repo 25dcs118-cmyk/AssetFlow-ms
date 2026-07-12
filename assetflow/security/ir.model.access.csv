@@ -32,3 +32,11 @@ access_asset_maintenance_request_admin,asset.maintenance.request.admin,model_ass
 
 access_asset_activity_log_employee,asset.activity.log.employee,model_asset_activity_log,assetflow.group_assetflow_employee,1,0,0,0
 access_asset_activity_log_admin,asset.activity.log.admin,model_asset_activity_log,assetflow.group_assetflow_admin,1,0,0,0
+
+access_audit_cycle_employee,audit.cycle.employee,model_audit_cycle,assetflow.group_assetflow_employee,1,0,0,0
+access_audit_cycle_manager,audit.cycle.manager,model_audit_cycle,assetflow.group_assetflow_asset_manager,1,1,1,0
+access_audit_cycle_admin,audit.cycle.admin,model_audit_cycle,assetflow.group_assetflow_admin,1,1,1,1
+
+access_audit_line_employee,audit.line.employee,model_audit_line,assetflow.group_assetflow_employee,1,1,0,0
+access_audit_line_manager,audit.line.manager,model_audit_line,assetflow.group_assetflow_asset_manager,1,1,1,1
+access_audit_line_admin,audit.line.admin,model_audit_line,assetflow.group_assetflow_admin,1,1,1,1

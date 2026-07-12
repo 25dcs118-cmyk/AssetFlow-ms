@@ -112,4 +112,22 @@
         <field name="search_view_id" ref="view_asset_allocation_search"/>
         <field name="context">{'search_default_filter_active': 0}</field>
     </record>
+
+    <record id="view_asset_allocation_department_pivot" model="ir.ui.view">
+        <field name="name">asset.allocation.department.pivot</field>
+        <field name="model">asset.allocation</field>
+        <field name="arch" type="xml">
+            <pivot string="Department Allocation Summary">
+                <field name="asset_department_id" type="row"/>
+                <field name="state" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_asset_allocation_department_report" model="ir.actions.act_window">
+        <field name="name">Department Allocation Summary</field>
+        <field name="res_model">asset.allocation</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="search_view_id" ref="view_asset_allocation_search"/>
+    </record>
 </odoo>

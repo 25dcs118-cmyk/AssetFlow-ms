@@ -33,6 +33,7 @@ class AssetAllocation(models.Model):
     ], default='active', required=True, tracking=True)
     is_overdue = fields.Boolean(compute='_compute_is_overdue', search='_search_is_overdue')
     category_id = fields.Many2one(related='asset_id.category_id', string='Category', store=True)
+    asset_department_id = fields.Many2one(related='asset_id.department_id', string='Asset Department', store=True)
     duration_days = fields.Float(compute='_compute_duration_days', store=True, string='Duration (Days)')
 
     @api.depends('allocation_date', 'actual_return_date')

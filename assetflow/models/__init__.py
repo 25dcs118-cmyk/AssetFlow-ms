@@ -7,3 +7,5 @@ from . import asset_allocation
 from . import asset_transfer
 from . import resource_booking
 from . import asset_maintenance_request
+from . import audit_cycle
+from . import audit_line

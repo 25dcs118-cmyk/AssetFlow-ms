@@ -20,6 +20,9 @@
     <menuitem id="menu_assetflow_maintenance" name="Maintenance" parent="menu_assetflow_root" sequence="50"
               action="view_asset_maintenance_request_action"/>
 
+    <menuitem id="menu_assetflow_audits" name="Audits" parent="menu_assetflow_root" sequence="55"
+              action="view_audit_cycle_action" groups="assetflow.group_assetflow_employee"/>
+
     <menuitem id="menu_assetflow_reporting" name="Reporting" parent="menu_assetflow_root" sequence="60"
               groups="assetflow.group_assetflow_department_head"/>
 
@@ -31,6 +34,12 @@
 
     <menuitem id="menu_assetflow_booking_report" name="Booking Utilization" parent="menu_assetflow_reporting"
               sequence="30" action="action_resource_booking_report"/>
+
+    <menuitem id="menu_assetflow_maintenance_report" name="Maintenance Frequency" parent="menu_assetflow_reporting"
+              sequence="40" action="action_asset_maintenance_frequency_report"/>
+
+    <menuitem id="menu_assetflow_department_allocation_report" name="Department Allocation Summary" parent="menu_assetflow_reporting"
+              sequence="50" action="action_asset_allocation_department_report"/>
 
     <menuitem id="menu_assetflow_configuration" name="Configuration" parent="menu_assetflow_root" sequence="90"
               groups="assetflow.group_assetflow_admin"/>
