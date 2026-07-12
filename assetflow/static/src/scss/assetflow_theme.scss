@@ -1,0 +1,31 @@
+// AssetFlow premium theme: brand navbar + shared surface polish.
+// Scoped to the app shell and our own components — deliberately avoids
+// touching Bootstrap/Odoo primary variables so the rest of the backend
+// (list selection colors, alerts, etc.) stays stable.
+
+:root {
+    --assetflow-grad-start: #5b3c91;
+    --assetflow-grad-end: #8b5cbf;
+}
+
+.o_main_navbar {
+    background: linear-gradient(135deg, var(--assetflow-grad-start) 0%, var(--assetflow-grad-end) 100%) !important;
+    border-bottom: none !important;
+}
+
+.assetflow_kanban {
+    .o_kanban_group {
+        background: transparent;
+    }
+
+    .assetflow_kanban_card {
+        border-radius: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        transition: box-shadow 0.15s ease-in-out, transform 0.1s ease-in-out;
+
+        &:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+    }
+}

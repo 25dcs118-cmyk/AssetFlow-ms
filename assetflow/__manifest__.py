@@ -20,6 +20,7 @@ lifecycle only, no dependency on accounting or purchasing.
         'security/assetflow_security.xml',
         'data/assetflow_sequence.xml',
         'data/assetflow_cron.xml',
+        'data/assetflow_branding.xml',
         'views/asset_department_views.xml',
         'views/asset_category_views.xml',
         'views/res_users_views.xml',
@@ -34,6 +35,7 @@ lifecycle only, no dependency on accounting or purchasing.
     ],
     'assets': {
         'web.assets_backend': [
+            'assetflow/static/src/scss/assetflow_theme.scss',
             'assetflow/static/src/dashboard/assetflow_dashboard.js',
             'assetflow/static/src/dashboard/assetflow_dashboard.xml',
             'assetflow/static/src/dashboard/assetflow_dashboard.scss',
@@ -41,4 +43,5 @@ lifecycle only, no dependency on accounting or purchasing.
     },
     'installable': True,
     'application': True,
+    'post_init_hook': 'post_init_hook',
 }

@@ -1,4 +1,35 @@
 .o_assetflow_dashboard {
+    .assetflow_hero {
+        background: linear-gradient(135deg, #5b3c91 0%, #8b5cbf 100%);
+        border-radius: 14px;
+        padding: 28px 28px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(91, 60, 145, 0.25);
+    }
+
+    .assetflow_hero_btn_solid {
+        background-color: #fff;
+        color: #5b3c91;
+        font-weight: 500;
+        border: none;
+
+        &:hover {
+            background-color: #f1ecf9;
+            color: #5b3c91;
+        }
+    }
+
+    .assetflow_hero_btn_ghost {
+        background-color: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: #fff;
+        }
+    }
+
     .assetflow_kpi_grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -10,13 +41,17 @@
         display: flex;
         align-items: center;
         gap: 14px;
-        padding: 16px;
-        border-radius: 10px;
-        border: 1px solid var(--o-view-border-color, #dee2e6);
+        padding: 18px;
+        border-radius: 12px;
+        border: 1px solid var(--o-view-border-color, #ebe9ee);
         background-color: var(--o-view-background-color, #fff);
         cursor: pointer;
         overflow: hidden;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
         transition: box-shadow 0.15s ease-in-out, transform 0.1s ease-in-out;
+        opacity: 0;
+        animation: assetflow-fade-in 0.35s ease-out forwards;
+        animation-delay: calc(var(--i, 0) * 0.05s);
 
         &::before {
             content: "";
@@ -34,8 +69,8 @@
         }
 
         &:hover {
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(16, 24, 40, 0.1);
+            transform: translateY(-2px);
 
             &::before {
                 opacity: 1;
@@ -49,24 +84,42 @@
 
     .assetflow_kpi_icon {
         flex: 0 0 auto;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 18px;
     }
 
+    .assetflow_tint_success { background: rgba(40, 167, 69, 0.12); color: #1e7e34; }
+    .assetflow_tint_primary { background: rgba(91, 60, 145, 0.12); color: #5b3c91; }
+    .assetflow_tint_warning { background: rgba(255, 159, 28, 0.15); color: #b06d00; }
+    .assetflow_tint_info { background: rgba(23, 162, 184, 0.12); color: #117a8b; }
+    .assetflow_tint_secondary { background: rgba(108, 117, 125, 0.12); color: #495057; }
+    .assetflow_tint_danger { background: rgba(220, 53, 69, 0.12); color: #c82333; }
+
     .assetflow_kpi_value {
-        font-size: 1.6rem;
-        font-weight: 600;
+        font-size: 1.7rem;
+        font-weight: 650;
         line-height: 1.1;
     }
 
     .assetflow_kpi_label {
         color: var(--o-main-text-color-muted, #6c757d);
         font-size: 0.85rem;
+    }
+}
+
+@keyframes assetflow-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 

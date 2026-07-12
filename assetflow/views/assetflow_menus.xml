@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_assetflow_root" name="AssetFlow" sequence="10"/>
+    <menuitem id="menu_assetflow_root" name="AssetFlow" sequence="10" web_icon="assetflow,static/description/icon.png"/>
 
     <menuitem id="menu_assetflow_dashboard" name="Dashboard" parent="menu_assetflow_root" sequence="5"
               action="action_assetflow_dashboard"/>
