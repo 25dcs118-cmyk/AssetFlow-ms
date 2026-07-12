@@ -23,6 +23,15 @@ su -p odoo -s /bin/sh -c '
     --db_host="$PGHOST" --db_port="$PGPORT" --db_user="$PGUSER" --db_password="$PGPASSWORD"
 ' || true
 
+# -i is a no-op once the module is already installed, so code/view changes on
+# every subsequent deploy would otherwise never actually reach the live site.
+# Always run -u too to pick up updates.
+su -p odoo -s /bin/sh -c '
+  export HOME=/var/lib/odoo
+  odoo -d "$DB_NAME" -u assetflow --stop-after-init \
+    --db_host="$PGHOST" --db_port="$PGPORT" --db_user="$PGUSER" --db_password="$PGPASSWORD"
+' || true
+
 exec su -p odoo -s /bin/sh -c '
   export HOME=/var/lib/odoo
   exec odoo -d "$DB_NAME" \
