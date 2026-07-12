@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_assetflow" model="ir.module.category">
+        <field name="name">AssetFlow</field>
+        <field name="description">Enterprise Asset &amp; Resource Management</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="group_assetflow_employee" model="res.groups">
+        <field name="name">Employee</field>
+        <field name="category_id" ref="module_category_assetflow"/>
+        <field name="comment">Views assets allocated to them, books shared resources, raises maintenance requests, initiates return/transfer requests.</field>
+    </record>
+
+    <record id="group_assetflow_department_head" model="res.groups">
+        <field name="name">Department Head</field>
+        <field name="category_id" ref="module_category_assetflow"/>
+        <field name="implied_ids" eval="[(4, ref('group_assetflow_employee'))]"/>
+        <field name="comment">Views department assets, approves allocation/transfer requests within the department, books shared resources on the department's behalf.</field>
+    </record>
+
+    <record id="group_assetflow_asset_manager" model="res.groups">
+        <field name="name">Asset Manager</field>
+        <field name="category_id" ref="module_category_assetflow"/>
+        <field name="implied_ids" eval="[(4, ref('group_assetflow_employee'))]"/>
+        <field name="comment">Registers and allocates assets, approves transfers, maintenance requests and audit discrepancy resolution, approves returns.</field>
+    </record>
+
+    <record id="group_assetflow_admin" model="res.groups">
+        <field name="name">Admin</field>
+        <field name="category_id" ref="module_category_assetflow"/>
+        <field name="implied_ids" eval="[(4, ref('group_assetflow_asset_manager')), (4, ref('group_assetflow_department_head'))]"/>
+        <field name="comment">Full system access. Manages departments, categories and audit cycles. Only role that can promote employees.</field>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>

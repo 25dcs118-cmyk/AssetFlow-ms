@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_overdue_allocation_scan" model="ir.cron">
+        <field name="name">AssetFlow: Overdue Allocation Scan</field>
+        <field name="model_id" ref="model_asset_allocation"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_flag_overdue()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="ir_cron_booking_state_update" model="ir.cron">
+        <field name="name">AssetFlow: Booking State Update &amp; Reminders</field>
+        <field name="model_id" ref="model_resource_booking"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_update_booking_states()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

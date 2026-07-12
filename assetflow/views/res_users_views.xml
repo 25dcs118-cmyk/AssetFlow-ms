@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_users_form_assetflow" model="ir.ui.view">
+        <field name="name">res.users.form.assetflow</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[hasclass('oe_title')]" position="after">
+                <group string="AssetFlow" name="assetflow_group">
+                    <group>
+                        <field name="department_id"/>
+                        <field name="employee_status"/>
+                    </group>
+                    <group>
+                        <field name="assetflow_role" readonly="1"/>
+                    </group>
+                </group>
+                <div class="oe_button_box" invisible="not id">
+                    <button name="action_promote_department_head" type="object"
+                            string="Promote to Department Head" class="btn-secondary"
+                            groups="assetflow.group_assetflow_admin"
+                            invisible="assetflow_role in ('department_head', 'admin')"/>
+                    <button name="action_promote_asset_manager" type="object"
+                            string="Promote to Asset Manager" class="btn-secondary"
+                            groups="assetflow.group_assetflow_admin"
+                            invisible="assetflow_role in ('asset_manager', 'admin')"/>
+                    <button name="action_demote_to_employee" type="object"
+                            string="Demote to Employee" class="btn-secondary"
+                            groups="assetflow.group_assetflow_admin"
+                            invisible="assetflow_role == 'employee'"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_users_tree_assetflow" model="ir.ui.view">
+        <field name="name">res.users.tree.assetflow</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_tree"/>
+        <field name="arch" type="xml">
+            <field name="login" position="after">
+                <field name="department_id"/>
+                <field name="assetflow_role"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="action_assetflow_employee_directory" model="ir.actions.act_window">
+        <field name="name">Employee Directory</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('share', '=', False)]</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_assetflow_root" name="AssetFlow" sequence="10"/>
+
+    <menuitem id="menu_assetflow_dashboard" name="Dashboard" parent="menu_assetflow_root" sequence="5"
+              action="action_assetflow_dashboard"/>
+
+    <menuitem id="menu_assetflow_assets" name="Assets" parent="menu_assetflow_root" sequence="10"
+              action="view_asset_asset_action"/>
+
+    <menuitem id="menu_assetflow_allocations" name="Allocations" parent="menu_assetflow_root" sequence="20"
+              action="view_asset_allocation_action"/>
+
+    <menuitem id="menu_assetflow_transfers" name="Transfers" parent="menu_assetflow_root" sequence="30"
+              action="view_asset_transfer_action"/>
+
+    <menuitem id="menu_assetflow_bookings" name="Bookings" parent="menu_assetflow_root" sequence="40"
+              action="view_resource_booking_action"/>
+
+    <menuitem id="menu_assetflow_maintenance" name="Maintenance" parent="menu_assetflow_root" sequence="50"
+              action="view_asset_maintenance_request_action"/>
+
+    <menuitem id="menu_assetflow_reporting" name="Reporting" parent="menu_assetflow_root" sequence="60"
+              groups="assetflow.group_assetflow_department_head"/>
+
+    <menuitem id="menu_assetflow_audit_log" name="Audit Log" parent="menu_assetflow_reporting" sequence="10"
+              action="view_asset_activity_log_action"/>
+
+    <menuitem id="menu_assetflow_allocation_report" name="Allocation Utilization" parent="menu_assetflow_reporting"
+              sequence="20" action="action_asset_allocation_report"/>
+
+    <menuitem id="menu_assetflow_booking_report" name="Booking Utilization" parent="menu_assetflow_reporting"
+              sequence="30" action="action_resource_booking_report"/>
+
+    <menuitem id="menu_assetflow_configuration" name="Configuration" parent="menu_assetflow_root" sequence="90"
+              groups="assetflow.group_assetflow_admin"/>
+
+    <menuitem id="menu_assetflow_employee_directory" name="Employee Directory" parent="menu_assetflow_configuration"
+              sequence="10" action="action_assetflow_employee_directory"/>
+
+    <menuitem id="menu_assetflow_departments" name="Departments" parent="menu_assetflow_configuration" sequence="20"
+              action="view_asset_department_action"/>
+
+    <menuitem id="menu_assetflow_categories" name="Asset Categories" parent="menu_assetflow_configuration" sequence="30"
+              action="view_asset_category_action"/>
+</odoo>

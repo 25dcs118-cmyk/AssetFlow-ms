@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_asset_maintenance_request_tree" model="ir.ui.view">
+        <field name="name">asset.maintenance.request.tree</field>
+        <field name="model">asset.maintenance.request</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state in ('rejected', 'resolved')" decoration-warning="state == 'approved'">
+                <field name="asset_id"/>
+                <field name="requester_id"/>
+                <field name="technician_id"/>
+                <field name="request_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_asset_maintenance_request_search" model="ir.ui.view">
+        <field name="name">asset.maintenance.request.search</field>
+        <field name="model">asset.maintenance.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="asset_id"/>
+                <field name="requester_id"/>
+                <filter string="Pending" name="filter_pending" domain="[('state', '=', 'pending')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_asset_maintenance_request_form" model="ir.ui.view">
+        <field name="name">asset.maintenance.request.form</field>
+        <field name="model">asset.maintenance.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" type="object" string="Approve"
+                            class="oe_highlight" invisible="state != 'pending'"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            invisible="state != 'pending'"/>
+                    <button name="action_start" type="object" string="Start Work"
+                            invisible="state != 'approved'"/>
+                    <button name="action_resolve" type="object" string="Resolve"
+                            invisible="state not in ('approved', 'in_progress')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,approved,in_progress,resolved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="asset_id"/>
+                            <field name="requester_id" readonly="1"/>
+                            <field name="technician_id"/>
+                        </group>
+                        <group>
+                            <field name="request_date" readonly="1"/>
+                            <field name="approval_date" readonly="1"/>
+                            <field name="resolution_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                        <field name="resolution_notes"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_asset_maintenance_request_action" model="ir.actions.act_window">
+        <field name="name">Maintenance Requests</field>
+        <field name="res_model">asset.maintenance.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_asset_maintenance_request_search"/>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+    </record>
+</odoo>

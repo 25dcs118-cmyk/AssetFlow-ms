@@ -1,0 +1,12 @@
+.o_assetflow_dashboard {
+    .assetflow_kpi_card {
+        min-width: 180px;
+        cursor: pointer;
+        background-color: var(--o-view-background-color, #fff);
+        transition: box-shadow 0.15s ease-in-out;
+
+        &:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+    }
+}

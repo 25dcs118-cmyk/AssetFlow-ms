@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="assetflow.Dashboard">
+        <div class="o_assetflow_dashboard p-4">
+            <h2 class="mb-4">AssetFlow Dashboard</h2>
+            <div class="d-flex flex-wrap gap-3">
+                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openAssets([['state', '=', 'available']])">
+                    <div class="assetflow_kpi_value fs-2 fw-bold text-success" t-esc="state.available"/>
+                    <div class="assetflow_kpi_label text-muted">Assets Available</div>
+                </div>
+                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openAssets([['state', '=', 'allocated']])">
+                    <div class="assetflow_kpi_value fs-2 fw-bold text-primary" t-esc="state.allocated"/>
+                    <div class="assetflow_kpi_label text-muted">Assets Allocated</div>
+                </div>
+                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openMaintenance([['state', 'in', ['approved', 'in_progress']]])">
+                    <div class="assetflow_kpi_value fs-2 fw-bold text-warning" t-esc="state.maintenance"/>
+                    <div class="assetflow_kpi_label text-muted">Maintenance Active</div>
+                </div>
+                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openBookings([['state', 'in', ['upcoming', 'ongoing']]])">
+                    <div class="assetflow_kpi_value fs-2 fw-bold text-info" t-esc="state.bookings"/>
+                    <div class="assetflow_kpi_label text-muted">Active Bookings</div>
+                </div>
+                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openTransfers([['state', '=', 'requested']])">
+                    <div class="assetflow_kpi_value fs-2 fw-bold text-secondary" t-esc="state.transfers"/>
+                    <div class="assetflow_kpi_label text-muted">Pending Transfers</div>
+                </div>
+                <div class="assetflow_kpi_card border rounded p-3" t-on-click="() => this.openAllocations([['is_overdue', '=', true]])">
+                    <div class="assetflow_kpi_value fs-2 fw-bold text-danger" t-esc="state.overdue"/>
+                    <div class="assetflow_kpi_label text-muted">Overdue Returns</div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

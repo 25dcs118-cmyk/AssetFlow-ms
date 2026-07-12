@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Admin implies Asset Manager and Department Head; Asset Manager and Department Head both
+        imply Employee (see assetflow_groups.xml). Odoo ORs together every group-scoped ir.rule
+        that a user's groups match, so without an explicit unrestricted rule here, Admin/Asset
+        Manager would inherit the restrictive Employee/Department Head domains below and be
+        locked out of records outside their own allocations/department. These rules restore
+        org-wide access for Asset Manager (and therefore Admin, which implies it).
+    -->
+    <record id="rule_asset_asset_manager_unrestricted" model="ir.rule">
+        <field name="name">Asset: Asset Manager sees all</field>
+        <field name="model_id" ref="model_asset_asset"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_asset_manager'))]"/>
+    </record>
+
+    <record id="rule_asset_allocation_manager_unrestricted" model="ir.rule">
+        <field name="name">Allocation: Asset Manager sees all</field>
+        <field name="model_id" ref="model_asset_allocation"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_asset_manager'))]"/>
+    </record>
+
+    <record id="rule_asset_transfer_manager_unrestricted" model="ir.rule">
+        <field name="name">Transfer: Asset Manager sees all</field>
+        <field name="model_id" ref="model_asset_transfer"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_asset_manager'))]"/>
+    </record>
+
+    <record id="rule_resource_booking_manager_unrestricted" model="ir.rule">
+        <field name="name">Booking: Asset Manager sees all</field>
+        <field name="model_id" ref="model_resource_booking"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_asset_manager'))]"/>
+    </record>
+
+    <record id="rule_asset_maintenance_request_manager_unrestricted" model="ir.rule">
+        <field name="name">Maintenance: Asset Manager sees all</field>
+        <field name="model_id" ref="model_asset_maintenance_request"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_asset_manager'))]"/>
+    </record>
+
+    <!-- Department Head: sees only assets belonging to their own department. -->
+    <record id="rule_asset_asset_department_head" model="ir.rule">
+        <field name="name">Asset: Department Head sees own department</field>
+        <field name="model_id" ref="model_asset_asset"/>
+        <field name="domain_force">[('department_id.department_head_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_department_head'))]"/>
+    </record>
+
+    <!-- Employee: sees only assets currently allocated to them. -->
+    <record id="rule_asset_asset_employee" model="ir.rule">
+        <field name="name">Asset: Employee sees own allocated assets</field>
+        <field name="model_id" ref="model_asset_asset"/>
+        <field name="domain_force">[('allocation_ids.employee_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_employee'))]"/>
+    </record>
+
+    <!-- Allocation: Employee sees/returns only their own allocations. -->
+    <record id="rule_asset_allocation_employee" model="ir.rule">
+        <field name="name">Allocation: Employee sees own allocations</field>
+        <field name="model_id" ref="model_asset_allocation"/>
+        <field name="domain_force">[('employee_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_employee'))]"/>
+    </record>
+
+    <!-- Allocation: Department Head sees allocations within their department. -->
+    <record id="rule_asset_allocation_department_head" model="ir.rule">
+        <field name="name">Allocation: Department Head sees department allocations</field>
+        <field name="model_id" ref="model_asset_allocation"/>
+        <field name="domain_force">['|', ('department_id.department_head_id', '=', user.id), ('employee_id.department_id.department_head_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_department_head'))]"/>
+    </record>
+
+    <!-- Transfer: Employee sees only transfers they requested. -->
+    <record id="rule_asset_transfer_employee" model="ir.rule">
+        <field name="name">Transfer: Employee sees own requests</field>
+        <field name="model_id" ref="model_asset_transfer"/>
+        <field name="domain_force">[('requested_by', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_employee'))]"/>
+    </record>
+
+    <!-- Transfer: Department Head sees transfers touching their department's assets. -->
+    <record id="rule_asset_transfer_department_head" model="ir.rule">
+        <field name="name">Transfer: Department Head sees department transfers</field>
+        <field name="model_id" ref="model_asset_transfer"/>
+        <field name="domain_force">['|', ('asset_id.department_id.department_head_id', '=', user.id), ('requested_by', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_department_head'))]"/>
+    </record>
+
+    <!-- Booking: Employee sees own bookings only. -->
+    <record id="rule_resource_booking_employee" model="ir.rule">
+        <field name="name">Booking: Employee sees own bookings</field>
+        <field name="model_id" ref="model_resource_booking"/>
+        <field name="domain_force">[('requester_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_employee'))]"/>
+    </record>
+
+    <!-- Booking: Department Head sees bookings made by their department's employees. -->
+    <record id="rule_resource_booking_department_head" model="ir.rule">
+        <field name="name">Booking: Department Head sees department bookings</field>
+        <field name="model_id" ref="model_resource_booking"/>
+        <field name="domain_force">['|', ('requester_id.department_id.department_head_id', '=', user.id), ('requester_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_department_head'))]"/>
+    </record>
+
+    <!-- Maintenance: Employee sees only requests they raised. -->
+    <record id="rule_asset_maintenance_request_employee" model="ir.rule">
+        <field name="name">Maintenance: Employee sees own requests</field>
+        <field name="model_id" ref="model_asset_maintenance_request"/>
+        <field name="domain_force">[('requester_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_employee'))]"/>
+    </record>
+
+    <!-- Maintenance: Department Head sees requests for their department's assets. -->
+    <record id="rule_asset_maintenance_request_department_head" model="ir.rule">
+        <field name="name">Maintenance: Department Head sees department requests</field>
+        <field name="model_id" ref="model_asset_maintenance_request"/>
+        <field name="domain_force">['|', ('asset_id.department_id.department_head_id', '=', user.id), ('requester_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_assetflow_department_head'))]"/>
+    </record>
+</odoo>

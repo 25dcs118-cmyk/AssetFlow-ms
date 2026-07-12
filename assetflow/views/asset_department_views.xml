@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_asset_department_tree" model="ir.ui.view">
+        <field name="name">asset.department.tree</field>
+        <field name="model">asset.department</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="complete_name" string="Department"/>
+                <field name="code"/>
+                <field name="department_head_id"/>
+                <field name="employee_count"/>
+                <field name="asset_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_asset_department_form" model="ir.ui.view">
+        <field name="name">asset.department.form</field>
+        <field name="model">asset.department</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_assets" icon="fa-cubes">
+                            <field name="asset_count" widget="statinfo" string="Assets"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="parent_id"/>
+                        </group>
+                        <group>
+                            <field name="department_head_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Employees">
+                            <field name="employee_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="login"/>
+                                    <field name="assetflow_role"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_asset_department_action" model="ir.actions.act_window">
+        <field name="name">Departments</field>
+        <field name="res_model">asset.department</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

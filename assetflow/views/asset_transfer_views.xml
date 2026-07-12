@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_asset_transfer_tree" model="ir.ui.view">
+        <field name="name">asset.transfer.tree</field>
+        <field name="model">asset.transfer</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state in ('rejected', 'completed')">
+                <field name="asset_id"/>
+                <field name="requested_by"/>
+                <field name="new_holder_type"/>
+                <field name="request_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_asset_transfer_search" model="ir.ui.view">
+        <field name="name">asset.transfer.search</field>
+        <field name="model">asset.transfer</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="asset_id"/>
+                <field name="requested_by"/>
+                <filter string="Requested" name="filter_requested" domain="[('state', '=', 'requested')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_asset_transfer_form" model="ir.ui.view">
+        <field name="name">asset.transfer.form</field>
+        <field name="model">asset.transfer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" type="object" string="Approve"
+                            class="oe_highlight" invisible="state != 'requested'"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            invisible="state != 'requested'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="asset_id"/>
+                            <field name="old_allocation_id" readonly="1"/>
+                            <field name="new_holder_type"/>
+                            <field name="new_employee_id" invisible="new_holder_type != 'employee'" required="new_holder_type == 'employee'"/>
+                            <field name="new_department_id" invisible="new_holder_type != 'department'" required="new_holder_type == 'department'"/>
+                            <field name="expected_return_date"/>
+                        </group>
+                        <group>
+                            <field name="requested_by" readonly="1"/>
+                            <field name="request_date" readonly="1"/>
+                            <field name="approved_by" readonly="1"/>
+                            <field name="approval_date" readonly="1"/>
+                            <field name="new_allocation_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_asset_transfer_action" model="ir.actions.act_window">
+        <field name="name">Transfer Requests</field>
+        <field name="res_model">asset.transfer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_asset_transfer_search"/>
+        <field name="context">{'search_default_filter_requested': 1}</field>
+    </record>
+</odoo>

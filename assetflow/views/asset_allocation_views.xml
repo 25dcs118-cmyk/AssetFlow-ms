@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_asset_allocation_tree" model="ir.ui.view">
+        <field name="name">asset.allocation.tree</field>
+        <field name="model">asset.allocation</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="is_overdue" decoration-muted="state != 'active'">
+                <field name="asset_id"/>
+                <field name="holder_name"/>
+                <field name="allocation_date"/>
+                <field name="expected_return_date"/>
+                <field name="actual_return_date"/>
+                <field name="is_overdue"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_asset_allocation_search" model="ir.ui.view">
+        <field name="name">asset.allocation.search</field>
+        <field name="model">asset.allocation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="asset_id"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter string="Active" name="filter_active" domain="[('state', '=', 'active')]"/>
+                <filter string="Overdue" name="filter_overdue" domain="[('is_overdue', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_asset_allocation_form" model="ir.ui.view">
+        <field name="name">asset.allocation.form</field>
+        <field name="model">asset.allocation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_return" type="object" string="Return"
+                            class="oe_highlight" invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="asset_id"/>
+                            <field name="holder_type"/>
+                            <field name="employee_id" invisible="holder_type != 'employee'" required="holder_type == 'employee'"/>
+                            <field name="department_id" invisible="holder_type != 'department'" required="holder_type == 'department'"/>
+                        </group>
+                        <group>
+                            <field name="allocation_date"/>
+                            <field name="expected_return_date"/>
+                            <field name="actual_return_date" readonly="1"/>
+                            <field name="is_overdue" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Condition">
+                        <field name="condition_out"/>
+                        <field name="condition_in"/>
+                        <field name="return_notes"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_asset_allocation_action" model="ir.actions.act_window">
+        <field name="name">Allocations</field>
+        <field name="res_model">asset.allocation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_asset_allocation_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+    </record>
+
+    <record id="view_asset_allocation_pivot" model="ir.ui.view">
+        <field name="name">asset.allocation.pivot</field>
+        <field name="model">asset.allocation</field>
+        <field name="arch" type="xml">
+            <pivot string="Allocation Utilization">
+                <field name="category_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="duration_days" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_asset_allocation_graph" model="ir.ui.view">
+        <field name="name">asset.allocation.graph</field>
+        <field name="model">asset.allocation</field>
+        <field name="arch" type="xml">
+            <graph string="Allocation Utilization" type="bar">
+                <field name="category_id"/>
+                <field name="duration_days" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_asset_allocation_report" model="ir.actions.act_window">
+        <field name="name">Allocation Utilization</field>
+        <field name="res_model">asset.allocation</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="search_view_id" ref="view_asset_allocation_search"/>
+        <field name="context">{'search_default_filter_active': 0}</field>
+    </record>
+</odoo>
